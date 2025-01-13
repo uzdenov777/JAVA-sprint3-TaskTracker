@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 
 class TaskManager {
@@ -14,23 +13,27 @@ class TaskManager {
     }
 
     public HashMap<Integer, Task> getTasks() { //Получение списка всех задач
-        if (tasks.size() == 0){return null;}
-
+        if (tasks.isEmpty()) {
+            return new HashMap<>();
+        }
         return tasks;
     }
 
     public HashMap<Integer, Epic> getEpics() { //Получение списка всех Epic
-        if (epics.size() == 0){return null;}
+        if (epics.isEmpty()) {
+            return new HashMap<>();
+        }
         return epics;
     }
 
     public HashMap<Integer, Subtask> getSubtasks() { //Получение списка всех подзадач
-        if (subtasks.size() == 0){return null;}
+        if (subtasks.isEmpty()) {
+            return new HashMap<>();
+        }
         return subtasks;
     }
 
     public void clearTasks() { //Удаление всех задач.
-
         tasks.clear();
     }
 
@@ -43,27 +46,29 @@ class TaskManager {
     }
 
     public Task getTaskById(int id) { //Получение по идентификатору
+        Task getTask = null;
 
-            if (tasks.containsKey(id)) { //Проверяет ID пренадлежит задачам////////////////////////
-                return tasks.get(id);
-            }
+        if (tasks.containsKey(id)) { //Проверяет ID пренадлежит задачам
+            getTask = tasks.get(id);
+        }
 
         for (Epic epic : epics.values()) { //Проверяет ID пренадлежит Epic
             if (epic.getId() == id) {
-                return epic;
+                getTask = epic;
             }
         }
+
         for (Subtask subtask : subtasks.values()) { //Проверяет ID пренадлежит подзадачам
             if (subtask.getId() == id) {
-                return subtask;
+                getTask = subtask;
             }
         }
         System.out.println("Не существует такого ID");
-        return null;
+        return getTask;
     }
 
 
-    public void addTask(Task taskInput) { //Добавляет полученный объект в соответсвующий HashMap и проверяет ,если такой ID уже
+    public void addTask(Task taskInput) { //Добавляет полученный объект в соответсвующий HashMap и проверяет, если такой ID уже
 
         if (taskInput.getClass() == Task.class) { // Проверяет на совместимость с задачей
             for (int id : tasks.keySet()) {
@@ -86,7 +91,7 @@ class TaskManager {
         if (taskInput.getClass() == Subtask.class) { //Проверяет на совместимость с подзадачей и добавляет в Epic
             boolean epicPresence = false;
             for (int id : epics.keySet()) {
-                if ((((Subtask) taskInput).getIdEpic() == id)) { //если есть Epic ,которому подзадача пренадлежит
+                if ((((Subtask) taskInput).getIdEpic() == id)) { //если есть Epic, которому подзадача пренадлежит
                     epicPresence = true;
                 }
             }
@@ -100,8 +105,8 @@ class TaskManager {
                 subtasks.put(taskInput.getId(), (Subtask) taskInput);
                 epics.get(((Subtask) taskInput).idEpic).
                         addSubtask((Subtask) taskInput); //Добавляет подзадачу в список Epic
-                chekStatus((Subtask) taskInput); //Проверяет статус Epic после добавления в него подзадачи
-            }else {
+                checkStatus((Subtask) taskInput); //Проверяет статус Epic после добавления в него подзадачи
+            } else {
                 System.out.println("Такого Epic не существует");
             }
         }
@@ -129,7 +134,7 @@ class TaskManager {
                 if (id == taskInput.getId()) {
                     subtasks.put(taskInput.getId(), (Subtask) taskInput);
                     epics.get(((Subtask) taskInput).idEpic).addSubtask((Subtask) taskInput); //Добавляет подзадачу в список Epic
-                    chekStatus((Subtask) taskInput); //Проверяет статус Epic после добавления в него подзадачи
+                    checkStatus((Subtask) taskInput); //Проверяет статус Epic после добавления в него подзадачи
                 }
             }
         }
@@ -156,8 +161,8 @@ class TaskManager {
         }
     }
 
-    public HashMap<Integer ,Subtask> getListSubtasks(int id) { //Получение списка всех подзадач определённого эпика.
-        for (int idKey : epics.keySet()) { //еределать как у Ислама
+    public HashMap<Integer, Subtask> getListSubtasks(int id) { //Получение списка всех подзадач определённого эпика.
+        for (int idKey : epics.keySet()) { //переделать как у Ислама
             if (id == idKey) {
                 return epics.get(id).getSubtasksArray();
             }
@@ -166,28 +171,25 @@ class TaskManager {
         return null;
     }
 
-    public void chekStatus(Subtask subtask) {//
+    public void checkStatus(Subtask subtask) {//
         Epic epic = epics.get(subtask.getIdEpic());
-        HashMap<Integer ,Subtask> subtasks = epic.getSubtasksArray();
+        HashMap<Integer, Subtask> subtasks = epic.getSubtasksArray();
 
-        int countNEW = 0;
-        int countIN_PROGRESS = 0;
-        int countDONE = 0;
+        int countNew = 0;
+        int countDone = 0;
 
         for (Subtask sub : subtasks.values()) {
 
             if (sub.getStatus().equals("NEW")) {
-                countNEW++;
-            } else if (sub.getStatus().equals("IN_PROGRESS")) {
-                countIN_PROGRESS++;
+                countNew++;
             } else if (sub.getStatus().equals("DONE")) {
-                countDONE++;
+                countDone++;
             }
         }
 
-        if (countNEW == subtasks.size() || subtasks.size() == 0) {
+        if (countNew == subtasks.size() || subtasks.isEmpty()) {
             epic.setStatus("NEW");
-        } else if (countDONE == subtasks.size()) {
+        } else if (countDone == subtasks.size()) {
             epic.setStatus("DONE");
         } else {
             epic.setStatus("IN_PROGRESS");
