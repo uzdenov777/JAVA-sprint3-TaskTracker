@@ -14,9 +14,9 @@ public enum StatusTask {
 
         for (Subtask sub : subtasks.values()) {
 
-            if (sub.getStatus().equals("NEW")) {
+            if (sub.getStatus() == StatusTask.NEW) {
                 countNew++;
-            } else if (sub.getStatus().equals("DONE")) {
+            } else if (sub.getStatus() == StatusTask.DONE) {
                 countDone++;
             }
         }
