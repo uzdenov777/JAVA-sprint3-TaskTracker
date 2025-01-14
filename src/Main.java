@@ -18,7 +18,7 @@ public class Main {
 
         System.out.println(manager.getEpicById(epic1.getId()));
         System.out.println(manager.getListSubtasks(epic1.getId()));
-        System.out.println("");
+        System.out.println(" ");
         Subtask subtask4 = new Subtask("subtask4", "subtask4subtask4", subtask2.getId(),  StatusTask.NEW, epic1.getId());
         Subtask subtask5 = new Subtask("subtask4", "subtask4subtask4", subtask1.getId(),  StatusTask.NEW, epic1.getId());
         manager.updateSubtask(subtask4);

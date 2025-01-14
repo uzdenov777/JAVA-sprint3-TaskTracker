@@ -1,8 +1,8 @@
 class Task {
-    private String name;
-    private String description;
+    private final String name;
+    private final String description;
     private StatusTask status;
-    private int id;
+    private final int id;
 
 
     public Task(String name, String description, int id, StatusTask status) {
