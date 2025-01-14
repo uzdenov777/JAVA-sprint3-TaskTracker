@@ -1,11 +1,11 @@
 class Task {
     private String name;
     private String description;
-    private String status;
+    private StatusTask status;
     private int id;
 
 
-    public Task(String name, String description, int id, String status) {
+    public Task(String name, String description, int id, StatusTask status) {
         this.name = name;
         this.description = description;
         this.id = id;
@@ -16,12 +16,12 @@ class Task {
         return id;
     }
 
-    public String getStatus(){
+    public StatusTask getStatus(){
         if (status == null){return null;}
         return status;
     }
 
-    public void setStatus(String status){
+    public void setStatus(StatusTask status){
         this.status = status;
     }
 
