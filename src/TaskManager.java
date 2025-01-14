@@ -40,38 +40,41 @@ class TaskManager {
 
     public void clearEpics() { //Удаление всех Epic.
         epics.clear();
+        clearSubtasks();
     }
 
     public void clearSubtasks() { //Удаление всех подзадач.
         subtasks.clear();
     }
 
-   public Optional<Task> getTaskById(int id) { //Получение Task по идентификатору
+    public Optional<Task> getTaskById(int id) { //Получение Task по идентификатору
         Optional<Task> getTask = Optional.empty();
 
         if (tasks.containsKey(id)) { //Проверяет ID, принадлежит задачам
             getTask = Optional.of(tasks.get(id));
-        }else {
+        } else {
             System.out.println("Не существует такого ID Task");
         }
         return getTask;
     }
+
     public Optional<Epic> getEpicById(int id) { //Получение Epic по идентификатору
         Optional<Epic> getTask = Optional.empty();
 
         if (epics.containsKey(id)) { //Проверяет ID, принадлежит Epic
             getTask = Optional.of(epics.get(id));
-        }else {
+        } else {
             System.out.println("Не существует такого ID Epic");
         }
         return getTask;
     }
+
     public Optional<Subtask> getSubtaskById(int id) { //Получение Subtask по идентификатору
         Optional<Subtask> getTask = Optional.empty();
 
         if (subtasks.containsKey(id)) { //Проверяет ID, принадлежит ли подзадачам
             getTask = Optional.of(subtasks.get(id));
-        }else {
+        } else {
             System.out.println("Не существует такого ID Subtask");
         }
         return getTask;
@@ -122,6 +125,7 @@ class TaskManager {
     public void updateEpic(Epic taskInput) { // Обновление Epic. Новая версия объекта с верным идентификатором передаётся в виде параметра.
         if (epics.containsKey(taskInput.getId())) {
             epics.put(taskInput.getId(), taskInput);
+
         }
     }
 
@@ -139,6 +143,11 @@ class TaskManager {
 
     public void removeEpicById(int id) { //Удаление Epic по идентификатору.
         epics.remove(id);
+        for (Subtask subtask : subtasks.values()) {
+            if (subtask.getIdEpic() == id) {
+                subtasks.remove(id);
+            }
+        }
     }
 
     public void removeSubtaskById(int id) { //Удаление Subtask по идентификатору.
